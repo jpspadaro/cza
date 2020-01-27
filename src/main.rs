@@ -38,7 +38,7 @@ fn main() {
     let info = AppInfo::with_max_dims(game::SCREEN_PIXELS_HEIGHT * 16. / 9., game::SCREEN_PIXELS_HEIGHT)
                        .min_dims(game::SCREEN_PIXELS_HEIGHT * 4. / 3., game::SCREEN_PIXELS_HEIGHT)
                        .tile_width(8)
-                       .title("Chirperjax")
+                       .title("Conrad's Zany Adventure")
                        .print_workload_info()
                        .print_gl_info();
     gate::run(info, GameApp::new());

@@ -21,7 +21,7 @@ use collider::geom::{v2, Vec2};
 use crate::asset_id::{AssetId, SpriteId};
 use super::SCREEN_PIXELS_HEIGHT;
 
-const COLOR: (u8, u8, u8) = (203, 219, 255);
+const COLOR: (u8, u8, u8) = (6, 6, 6);
 const PERIOD: f64 = 10.;
 const SEPARATION: f64 = 60.;
 
