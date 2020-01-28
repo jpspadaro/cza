@@ -3,6 +3,8 @@ A simple story driven platformer.
 
 Play the game online [here](https://jpspadaro.github.io/cza/game).
 
+Read the docs [here](https://jpspadaro.github.io/cza/game/chirperjax).
+
 # Original Chirperjax Documentation
 A simple 2D platformer game that demonstrates the use of two Rust crates:
 [Gate](https://crates.io/crates/gate) and [Collider](https://crates.io/crates/collider).
