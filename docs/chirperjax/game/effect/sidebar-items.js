@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["color_fade",""],["puff",""],["square_fade",""]],"struct":[["ColorFade",""],["Effect",""],["Puff",""],["SquareFade",""]],"trait":[["InternalEffect",""]]});

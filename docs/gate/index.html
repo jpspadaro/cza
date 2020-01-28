@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `gate` crate."><meta name="keywords" content="rust, rustlang, rust-lang, gate"><title>gate - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../gate/index.html'><div class='logo-container'><img src='../rust-logo.png' alt='logo'></div></a><p class='location'>Crate gate</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all gate's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'gate', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/gate/lib.rs.html#15-101' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>gate</a></span></h1><div class='docblock'><p>Gate is a game development library tailored to 2D pixel-art games.</p>
+<p>When creating a game, it is good practice to make a layer,
+specific to one's needs, that separates the
+game logic from the resource management, rendering, audio, and other interfacing
+that is needed for a game.
+&quot;Gate&quot; is the layer that I created for this purpose with my personal game development endeavors,
+and I decided to make it public.
+It should be noted that this library was developed for my own personal needs,
+and is not meant to be a general purpose game development library.
+This manifests itself mostly with the renderer, which is made specifically for 2D pixel art.
+If your game has similar needs or you just want to get something going quickly,
+then this library is for you.
+If you have slightly different needs, then you can still use this code as a reference point.</p>
+<p>Users of this crate should create a build script in their project,
+invoking functionality from the sibling crate &quot;gate_build&quot;.
+This will generate texture atlases and enums to reference assets.
+See the &quot;gate_build&quot; crate for more details.</p>
+<h1 id="example-usage" class="section-header"><a href="#example-usage">Example usage</a></h1>
+<p>For a full example, see <a href="https://github.com/SergiusIW/gate/tree/master/example">https://github.com/SergiusIW/gate/tree/master/example</a>.</p>
+<h1 id="future-changes" class="section-header"><a href="#future-changes">Future changes</a></h1>
+<p>There are a number of new features I am planning to add to Gate in the future.
+Some of these will involve breaking changes.</p>
+<ul>
+<li>Loading assets on the fly</li>
+<li>Support for displaying text</li>
+<li>Adding XBox controller input</li>
+<li>Generating enums/handles for user-specific assets, and loading those assets</li>
+<li>Handling game save data</li>
+<li>Playing looping music that has a one-time intro, without any hiccups in the music
+(not sure how I'm going to do this, but it's important to me;
+game libraries often seem to overlook this fundamental feature)</li>
+<li>New renderer modes with new shaders</li>
+</ul>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table><tr class='module-item'><td><a class="mod" href="asset_id/index.html" title='gate::asset_id mod'>asset_id</a></td><td class='docblock-short'><p>Traits related to asset enums that are generated by &quot;gate_build&quot;.</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="renderer/index.html" title='gate::renderer mod'>renderer</a></td><td class='docblock-short'><p>Contains structs relating to application rendering.</p>
+</td></tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table><tr class='module-item'><td><a class="macro" href="macro.gate_header.html" title='gate::gate_header macro'>gate_header</a></td><td class='docblock-short'><p>Macro to be placed in the <code>main.rs</code> file for a Gate app.</p>
+</td></tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.AppContext.html" title='gate::AppContext struct'>AppContext</a></td><td class='docblock-short'><p>Context passed to methods in <code>App</code>.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.AppInfo.html" title='gate::AppInfo struct'>AppInfo</a></td><td class='docblock-short'><p>A struct for specifying initialization information for running an <code>App</code>.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.Audio.html" title='gate::Audio struct'>Audio</a></td><td class='docblock-short'><p>Struct for audio playback.</p>
+</td></tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table><tr class='module-item'><td><a class="enum" href="enum.KeyCode.html" title='gate::KeyCode enum'>KeyCode</a></td><td class='docblock-short'><p>Enum for keyboard keys and mouse buttons.</p>
+</td></tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table><tr class='module-item'><td><a class="trait" href="trait.App.html" title='gate::App trait'>App</a></td><td class='docblock-short'><p>Trait that a user can implement to specify application behavior, passed into <code>gate::run(...)</code>.</p>
+</td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table><tr class='module-item'><td><a class="fn" href="fn.run.html" title='gate::run fn'>run</a></td><td class='docblock-short'><p>Invoke this in a <code>main</code> method to run the <code>App</code>.</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "gate";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

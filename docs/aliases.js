@@ -1,0 +1,17 @@
+var ALIASES = {};
+ALIASES["bitflags"] = {};
+ALIASES["byteorder"] = {};
+ALIASES["chirperjax"] = {};
+ALIASES["collider"] = {};
+ALIASES["fnv"] = {};
+ALIASES["gate"] = {};
+ALIASES["gl"] = {};
+ALIASES["lazy_static"] = {};
+ALIASES["libc"] = {};
+ALIASES["num"] = {};
+ALIASES["num_integer"] = {};
+ALIASES["num_iter"] = {};
+ALIASES["num_traits"] = {};
+ALIASES["rand"] = {};
+ALIASES["sdl2"] = {};
+ALIASES["sdl2_sys"] = {};
