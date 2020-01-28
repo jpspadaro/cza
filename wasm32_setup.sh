@@ -6,7 +6,7 @@
 ################
 
 cp target/wasm32-unknown-unknown/release/chirperjax.wasm html/
-mv html/chirperjax.wasm html/gate_app.wasm
+mv html/cza.wasm html/gate_app.wasm
 cp howler.js html/
 cd html
 python -m SimpleHTTPServer 8888
