@@ -1,6 +1,6 @@
 [package]
-name = "chirperjax"
-version = "0.1.0"
+name = "cza"
+version = "0.0.1"
 edition = "2018"
 
 [dependencies]
