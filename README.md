@@ -1,4 +1,7 @@
-# Chirperjax
+# Conrad's Zany Adventure
+A simple story driven platformer.
+
+# Original Chirperjax Documentation
 A simple 2D platformer game that demonstrates the use of two Rust crates:
 [Gate](https://crates.io/crates/gate) and [Collider](https://crates.io/crates/collider).
 
@@ -11,6 +14,8 @@ Thanks to WebAssembly and WebGl, you can play this game online at
 
 Instructions are the same as building the Gate example app.
 See <https://github.com/SergiusIW/gate/tree/master/example>.
+
+***Note: CZA contains a script for moving dependencies and starting a webserver for testing (requires Python) called wasm32_setup.sh (tested for Linux and Macos) for the `wasm32-unknown-unknown` target.***
 
 ### Videos
 
