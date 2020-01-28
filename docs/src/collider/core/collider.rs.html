@@ -1,0 +1,745 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/Users/admin/.cargo/registry/src/github.com-1ecc6299db9ec823/collider-0.3.1/src/core/collider.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>collider.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../collider/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
+<span id="149">149</span>
+<span id="150">150</span>
+<span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
+<span id="160">160</span>
+<span id="161">161</span>
+<span id="162">162</span>
+<span id="163">163</span>
+<span id="164">164</span>
+<span id="165">165</span>
+<span id="166">166</span>
+<span id="167">167</span>
+<span id="168">168</span>
+<span id="169">169</span>
+<span id="170">170</span>
+<span id="171">171</span>
+<span id="172">172</span>
+<span id="173">173</span>
+<span id="174">174</span>
+<span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
+<span id="186">186</span>
+<span id="187">187</span>
+<span id="188">188</span>
+<span id="189">189</span>
+<span id="190">190</span>
+<span id="191">191</span>
+<span id="192">192</span>
+<span id="193">193</span>
+<span id="194">194</span>
+<span id="195">195</span>
+<span id="196">196</span>
+<span id="197">197</span>
+<span id="198">198</span>
+<span id="199">199</span>
+<span id="200">200</span>
+<span id="201">201</span>
+<span id="202">202</span>
+<span id="203">203</span>
+<span id="204">204</span>
+<span id="205">205</span>
+<span id="206">206</span>
+<span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
+<span id="214">214</span>
+<span id="215">215</span>
+<span id="216">216</span>
+<span id="217">217</span>
+<span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
+<span id="241">241</span>
+<span id="242">242</span>
+<span id="243">243</span>
+<span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
+<span id="335">335</span>
+<span id="336">336</span>
+<span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="comment">// Copyright 2016-2018 Matthew D. Michelotti</span>
+<span class="comment">//</span>
+<span class="comment">// Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="comment">// you may not use this file except in compliance with the License.</span>
+<span class="comment">// You may obtain a copy of the License at</span>
+<span class="comment">//</span>
+<span class="comment">//   http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="comment">//</span>
+<span class="comment">// Unless required by applicable law or agreed to in writing, software</span>
+<span class="comment">// distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="comment">// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="comment">// See the License for the specific language governing permissions and</span>
+<span class="comment">// limitations under the License.</span>
+
+<span class="kw">use</span> <span class="ident">fnv</span>::<span class="ident">FnvHashMap</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
+<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">events</span>::{<span class="ident">EventManager</span>, <span class="ident">EventKey</span>, <span class="ident">EventKeysMap</span>, <span class="ident">InternalEvent</span>};
+<span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">Hitbox</span>, <span class="ident">HbVel</span>, <span class="ident">HbId</span>, <span class="ident">HIGH_TIME</span>, <span class="ident">HbProfile</span>, <span class="ident">HbGroup</span>};
+<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">grid</span>::<span class="ident">Grid</span>;
+<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">dur_hitbox</span>::<span class="ident">DurHitbox</span>;
+<span class="kw">use</span> <span class="ident">geom</span>::<span class="ident">PlacedShape</span>;
+<span class="kw">use</span> <span class="ident">util</span>::<span class="ident">TightSet</span>;
+
+<span class="comment">// TODO check that floating point values are within a good range when adding/updating hitboxes</span>
+
+<span class="doccomment">/// A structure that tracks hitboxes and returns collide/separate events.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Collider manages events using a &quot;simulation time&quot; that the user updates as necessary.</span>
+<span class="doccomment">/// This time starts at `0.0`.</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Collider</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">HbProfile</span><span class="op">&gt;</span> {
+    <span class="ident">hitboxes</span>: <span class="ident">FnvHashMap</span><span class="op">&lt;</span><span class="ident">HbId</span>, <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">time</span>: <span class="ident">f64</span>,
+    <span class="ident">grid</span>: <span class="ident">Grid</span>,
+    <span class="ident">padding</span>: <span class="ident">f64</span>,
+    <span class="ident">events</span>: <span class="ident">EventManager</span>
+}
+
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">HbProfile</span><span class="op">&gt;</span> <span class="ident">Collider</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// Constructs a new `Collider` instance.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Collider</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">cell_width</span> <span class="op">=</span> <span class="ident">P</span>::<span class="ident">cell_width</span>();
+        <span class="kw">let</span> <span class="ident">padding</span> <span class="op">=</span> <span class="ident">P</span>::<span class="ident">padding</span>();
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">cell_width</span> <span class="op">&gt;</span> <span class="ident">padding</span>, <span class="string">&quot;requires cell_width &gt; padding&quot;</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">padding</span> <span class="op">&gt;</span> <span class="number">0.0</span>, <span class="string">&quot;requires padding &gt; 0.0&quot;</span>);
+        <span class="ident">Collider</span> {
+            <span class="ident">hitboxes</span> : <span class="ident">FnvHashMap</span>::<span class="ident">default</span>(),
+            <span class="ident">time</span> : <span class="number">0.0</span>,
+            <span class="ident">grid</span> : <span class="ident">Grid</span>::<span class="ident">new</span>(<span class="ident">cell_width</span>),
+            <span class="ident">padding</span> : <span class="ident">padding</span>,
+            <span class="ident">events</span> : <span class="ident">EventManager</span>::<span class="ident">new</span>()
+        }
+    }
+
+    <span class="doccomment">/// Returns the current simulation time.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+        <span class="self">self</span>.<span class="ident">time</span>
+    }
+
+    <span class="doccomment">/// Returns the time at which `self.next()` needs to be called again.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Even if `self.next_time() == self.time()`, there is a chance that</span>
+    <span class="doccomment">/// calling `self.next()` will return `None`, having processed an internal event.</span>
+    <span class="doccomment">/// Regardless, after `self.next()` has been called repeatedly until it</span>
+    <span class="doccomment">/// returns `None`, then `self.next_time()` will be greater than `self.time()` again.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This is a fast constant-time operation.  The result may be infinity.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+        <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">peek_time</span>()
+    }
+
+    <span class="doccomment">/// Advances the simulation time to the given value.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The positions of all hitboxes will be updated based on the velocities of the hitboxes.</span>
+    <span class="doccomment">/// Will panic if `time` exceeds `self.next_time()`.</span>
+    <span class="doccomment">/// Will also panic if `time` is less than `self.time()` (i.e. cannot rewind time).</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The hitboxes are updated implicitly, and this is actually a</span>
+    <span class="doccomment">/// fast constant-time operation.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_time</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">time</span>: <span class="ident">f64</span>) {
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">time</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span>, <span class="string">&quot;cannot rewind time&quot;</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">time</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">next_time</span>(), <span class="string">&quot;time must not exceed next_time()&quot;</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">time</span> <span class="op">&lt;</span> <span class="ident">HIGH_TIME</span>, <span class="string">&quot;time must not exceed {}&quot;</span>, <span class="ident">HIGH_TIME</span>);
+        <span class="self">self</span>.<span class="ident">time</span> <span class="op">=</span> <span class="ident">time</span>;
+    }
+
+    <span class="doccomment">/// Processes and returns the next `Collide` or `Separate` event,</span>
+    <span class="doccomment">/// or returns `None` if there are no more events that occured at the given time</span>
+    <span class="doccomment">/// (although an internal event might have been processed if `None` is returned).</span>
+    <span class="doccomment">/// Will always return `None` if `self.next_time() &gt; self.time()`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The returned value is a tuple, denoting the type of event (`Collide` or `Separate`)</span>
+    <span class="doccomment">/// and the two hitbox profiles involved, in increasing order by `HbId`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">HbEvent</span>, <span class="ident">P</span>, <span class="ident">P</span>)<span class="op">&gt;</span> {
+        <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">event</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">next</span>(<span class="self">self</span>.<span class="ident">time</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">hitboxes</span>) {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">event</span>, <span class="ident">id_1</span>, <span class="ident">id_2</span>)) <span class="op">=</span> <span class="self">self</span>.<span class="ident">process_event</span>(<span class="ident">event</span>) {
+                <span class="kw">return</span> <span class="prelude-val">Some</span>((<span class="ident">event</span>, <span class="self">self</span>.<span class="ident">hitboxes</span>[<span class="kw-2">&amp;</span><span class="ident">id_1</span>].<span class="ident">profile</span>, <span class="self">self</span>.<span class="ident">hitboxes</span>[<span class="kw-2">&amp;</span><span class="ident">id_2</span>].<span class="ident">profile</span>));
+            }
+        }
+        <span class="prelude-val">None</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">process_event</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">event</span>: <span class="ident">InternalEvent</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span>(<span class="ident">HbEvent</span>, <span class="ident">HbId</span>, <span class="ident">HbId</span>)<span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="ident">event</span> {
+            <span class="ident">InternalEvent</span>::<span class="ident">Collide</span>(<span class="ident">id_1</span>, <span class="ident">id_2</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hitbox_info_1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id_1</span>).<span class="ident">unwrap</span>();
+                {
+                    <span class="kw">let</span> <span class="ident">hitbox_info_2</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">id_2</span>).<span class="ident">unwrap</span>();
+                    <span class="ident">Collider</span>::<span class="ident">process_collision</span>(<span class="ident">id_1</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">hitbox_info_1</span>, <span class="ident">id_2</span>, <span class="ident">hitbox_info_2</span>,
+                                                <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">events</span>, <span class="self">self</span>.<span class="ident">time</span>, <span class="self">self</span>.<span class="ident">padding</span>);
+                }
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">insert</span>(<span class="ident">id_1</span>, <span class="ident">hitbox_info_1</span>).<span class="ident">is_none</span>());
+                <span class="prelude-val">Some</span>(<span class="ident">new_event</span>(<span class="ident">HbEvent</span>::<span class="ident">Collide</span>, <span class="ident">id_1</span>, <span class="ident">id_2</span>))
+            },
+            <span class="ident">InternalEvent</span>::<span class="ident">Separate</span>(<span class="ident">id_1</span>, <span class="ident">id_2</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hitbox_info_1</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id_1</span>).<span class="ident">unwrap</span>();
+                {
+                    <span class="kw">let</span> <span class="ident">hitbox_info_2</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">id_2</span>).<span class="ident">unwrap</span>();
+                    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">hitbox_info_1</span>.<span class="ident">overlaps</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id_2</span>));
+                    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">hitbox_info_2</span>.<span class="ident">overlaps</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id_1</span>));
+                    <span class="kw">let</span> <span class="ident">delay</span> <span class="op">=</span> <span class="ident">hitbox_info_1</span>.<span class="ident">hitbox_at_time</span>(<span class="self">self</span>.<span class="ident">time</span>).<span class="ident">collide_time</span>(<span class="kw-2">&amp;</span><span class="ident">hitbox_info_2</span>.<span class="ident">hitbox_at_time</span>(<span class="self">self</span>.<span class="ident">time</span>));
+                    <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">add_pair_event</span>(<span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">delay</span>, <span class="ident">InternalEvent</span>::<span class="ident">Collide</span>(<span class="ident">id_1</span>, <span class="ident">id_2</span>),
+                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">hitbox_info_1</span>.<span class="ident">event_keys</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">hitbox_info_2</span>.<span class="ident">event_keys</span>);
+                }
+                <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">insert</span>(<span class="ident">id_1</span>, <span class="ident">hitbox_info_1</span>).<span class="ident">is_none</span>());
+                <span class="prelude-val">Some</span>(<span class="ident">new_event</span>(<span class="ident">HbEvent</span>::<span class="ident">Separate</span>, <span class="ident">id_1</span>, <span class="ident">id_2</span>))
+            },
+            <span class="ident">InternalEvent</span>::<span class="ident">Reiterate</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="self">self</span>.<span class="ident">internal_update_hitbox</span>(<span class="ident">id</span>, <span class="prelude-val">None</span>);
+                <span class="prelude-val">None</span>
+            },
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">debug_assertions</span>)]</span>
+            <span class="ident">InternalEvent</span>::<span class="ident">PanicSmallHitbox</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;hitbox {} became too small&quot;</span>, <span class="ident">id</span>)
+            },
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">debug_assertions</span>)]</span>
+            <span class="ident">InternalEvent</span>::<span class="ident">PanicDurationPassed</span>(<span class="ident">id</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;hitbox {} was not updated before duration passed&quot;</span>, <span class="ident">id</span>)
+            }
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">process_collision</span>(<span class="ident">id_1</span>: <span class="ident">HbId</span>, <span class="ident">hb_1</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">id_2</span>: <span class="ident">HbId</span>, <span class="ident">hb_2</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>,
+                         <span class="ident">events</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventManager</span>, <span class="ident">time</span>: <span class="ident">f64</span>, <span class="ident">padding</span>: <span class="ident">f64</span>) {
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">hb_1</span>.<span class="ident">overlaps</span>.<span class="ident">insert</span>(<span class="ident">id_2</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">hb_2</span>.<span class="ident">overlaps</span>.<span class="ident">insert</span>(<span class="ident">id_1</span>));
+        <span class="kw">let</span> <span class="ident">delay</span> <span class="op">=</span> <span class="ident">hb_1</span>.<span class="ident">hitbox_at_time</span>(<span class="ident">time</span>).<span class="ident">separate_time</span>(<span class="kw-2">&amp;</span><span class="ident">hb_2</span>.<span class="ident">hitbox_at_time</span>(<span class="ident">time</span>), <span class="ident">padding</span>);
+        <span class="ident">events</span>.<span class="ident">add_pair_event</span>(<span class="ident">time</span> <span class="op">+</span> <span class="ident">delay</span>, <span class="ident">InternalEvent</span>::<span class="ident">Separate</span>(<span class="ident">id_1</span>, <span class="ident">id_2</span>),
+                              <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">hb_1</span>.<span class="ident">event_keys</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">hb_2</span>.<span class="ident">event_keys</span>);
+    }
+
+    <span class="doccomment">/// Returns the current state of the hitbox with the given `id`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_hitbox</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Hitbox</span> {
+        <span class="self">self</span>.<span class="ident">hitboxes</span>[<span class="kw-2">&amp;</span><span class="ident">id</span>].<span class="ident">pub_hitbox_at_time</span>(<span class="self">self</span>.<span class="ident">time</span>)
+    }
+
+    <span class="doccomment">/// Adds a new hitbox to the collider.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The `profile` is used to track the hitbox over time;</span>
+    <span class="doccomment">/// Collider will return this profile in certain methods,</span>
+    <span class="doccomment">/// and the ID in this profile can be used to make updates to the hitbox.</span>
+    <span class="doccomment">/// This method will panic if there is an ID clash.</span>
+    <span class="doccomment">/// `hitbox` is the initial state of the hitbox.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns a vector of all hitbox profiles that this new hitbox collided with as it was added.</span>
+    <span class="doccomment">/// Note that separate collision events will not be generated for these collisions.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_hitbox</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">profile</span>: <span class="ident">P</span>, <span class="ident">hitbox</span>: <span class="ident">Hitbox</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="ident">hitbox</span>.<span class="ident">validate</span>(<span class="self">self</span>.<span class="ident">padding</span>, <span class="self">self</span>.<span class="ident">time</span>);
+        <span class="kw">let</span> <span class="ident">id</span> <span class="op">=</span> <span class="ident">profile</span>.<span class="ident">id</span>();
+        <span class="kw">let</span> <span class="ident">has_group</span> <span class="op">=</span> <span class="ident">profile</span>.<span class="ident">group</span>().<span class="ident">is_some</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">info</span> <span class="op">=</span> <span class="ident">HitboxInfo</span>::<span class="ident">new</span>(<span class="ident">hitbox</span>, <span class="ident">profile</span>, <span class="self">self</span>.<span class="ident">time</span>);
+        <span class="self">self</span>.<span class="ident">solitaire_event_check</span>(<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>, <span class="ident">has_group</span>);
+        <span class="kw">let</span> <span class="ident">dur_hitbox</span> <span class="op">=</span> <span class="ident">info</span>.<span class="ident">hitbox</span>.<span class="ident">to_dur_hitbox</span>(<span class="self">self</span>.<span class="ident">time</span>);
+        <span class="self">self</span>.<span class="ident">update_hitbox_tracking</span>(<span class="ident">id</span>, <span class="ident">info</span>, <span class="prelude-val">None</span>, <span class="ident">dur_hitbox</span>)
+    }
+
+    <span class="doccomment">/// Updates the velocity information of the hitbox with the given `id`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_hitbox_vel</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>, <span class="ident">vel</span>: <span class="ident">HbVel</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">hitboxes</span>[<span class="kw-2">&amp;</span><span class="ident">id</span>].<span class="ident">hitbox</span>.<span class="ident">vel</span> <span class="op">!</span><span class="op">=</span> <span class="ident">vel</span> {
+            <span class="self">self</span>.<span class="ident">internal_update_hitbox</span>(<span class="ident">id</span>, <span class="prelude-val">Some</span>(<span class="ident">vel</span>));
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">internal_update_hitbox</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>, <span class="ident">vel</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HbVel</span><span class="op">&gt;</span>) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;hitbox id {} not found&quot;</span>, <span class="ident">id</span>));
+        <span class="kw">let</span> <span class="ident">old_hitbox</span> <span class="op">=</span> <span class="ident">info</span>.<span class="ident">hitbox</span>.<span class="ident">to_dur_hitbox</span>(<span class="ident">info</span>.<span class="ident">start_time</span>);
+        <span class="ident">info</span>.<span class="ident">hitbox</span> <span class="op">=</span> <span class="ident">info</span>.<span class="ident">pub_hitbox_at_time</span>(<span class="self">self</span>.<span class="ident">time</span>);
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">vel</span>) <span class="op">=</span> <span class="ident">vel</span> {
+            <span class="ident">info</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span> <span class="op">=</span> <span class="ident">vel</span>;
+            <span class="ident">info</span>.<span class="ident">hitbox</span>.<span class="ident">validate</span>(<span class="self">self</span>.<span class="ident">padding</span>, <span class="self">self</span>.<span class="ident">time</span>);
+        }
+        <span class="ident">info</span>.<span class="ident">start_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span>;
+        <span class="kw">let</span> <span class="ident">has_group</span> <span class="op">=</span> <span class="ident">info</span>.<span class="ident">profile</span>.<span class="ident">group</span>().<span class="ident">is_some</span>();
+        <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">clear_related_events</span>(<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>.<span class="ident">event_keys</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">hitboxes</span>);
+        <span class="self">self</span>.<span class="ident">solitaire_event_check</span>(<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>, <span class="ident">has_group</span>);
+        <span class="kw">let</span> <span class="ident">new_hitbox</span> <span class="op">=</span> <span class="ident">info</span>.<span class="ident">hitbox</span>.<span class="ident">to_dur_hitbox</span>(<span class="self">self</span>.<span class="ident">time</span>);
+        <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">update_hitbox_tracking</span>(<span class="ident">id</span>, <span class="ident">info</span>, <span class="prelude-val">Some</span>(<span class="ident">old_hitbox</span>), <span class="ident">new_hitbox</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_empty</span>());
+    }
+
+    <span class="doccomment">/// Removes the hitbox with the given `id` from all tracking.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Returns a vector of all hitbox profiles that this hitbox separated from as it was removed.</span>
+    <span class="doccomment">/// No further events will be generated for this hitbox.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove_hitbox</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;hitbox id {} not found&quot;</span>, <span class="ident">id</span>));
+        <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">clear_related_events</span>(<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>.<span class="ident">event_keys</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">hitboxes</span>);
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">group</span>) <span class="op">=</span> <span class="ident">info</span>.<span class="ident">profile</span>.<span class="ident">group</span>() {
+            <span class="kw">let</span> <span class="ident">info_start_time</span> <span class="op">=</span> <span class="ident">info</span>.<span class="ident">start_time</span>;
+            <span class="kw">let</span> <span class="ident">empty_group_array</span>: <span class="kw-2">&amp;</span>[<span class="ident">HbGroup</span>] <span class="op">=</span> <span class="kw-2">&amp;</span>[];
+            <span class="self">self</span>.<span class="ident">grid</span>.<span class="ident">update_hitbox</span>(
+                <span class="ident">id</span>, <span class="ident">group</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">info</span>.<span class="ident">hitbox</span>.<span class="ident">to_dur_hitbox</span>(<span class="ident">info_start_time</span>)), <span class="prelude-val">None</span>, <span class="ident">empty_group_array</span>
+            );
+        }
+        <span class="self">self</span>.<span class="ident">clear_overlaps</span>(<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>)
+    }
+
+    <span class="doccomment">/// Returns the profiles of all currently tracked overlaps on the hitbox with the given `id`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_overlaps</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;hitbox id {} not found&quot;</span>, <span class="ident">id</span>));
+        <span class="ident">info</span>.<span class="ident">overlaps</span>.<span class="ident">iter</span>()
+                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">other_id</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">hitboxes</span>[<span class="ident">other_id</span>].<span class="ident">profile</span>)
+                     .<span class="ident">collect</span>()
+    }
+
+    <span class="doccomment">/// Returns true if there is a currently tracked overlap between the hitboxes with `id_1` and `id_2`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_overlapping</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id_1</span>: <span class="ident">HbId</span>, <span class="ident">id_2</span>: <span class="ident">HbId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">id_1</span>)
+                     .<span class="ident">map</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> <span class="ident">info</span>.<span class="ident">overlaps</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">id_2</span>))
+                     .<span class="ident">unwrap_or</span>(<span class="bool-val">false</span>)
+    }
+
+    <span class="doccomment">/// Returns the profiles of all hitboxes that overlap the given `shape` and interact with the given `profile`.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">query_overlaps</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">shape</span>: <span class="kw-2">&amp;</span><span class="ident">PlacedShape</span>, <span class="ident">profile</span>: <span class="kw-2">&amp;</span><span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">grid</span>.<span class="ident">shape_cellmates</span>(<span class="ident">shape</span>, <span class="ident">profile</span>.<span class="ident">interact_groups</span>()).<span class="ident">iter</span>()
+                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">id</span><span class="op">|</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">hitboxes</span>[<span class="ident">id</span>])
+                 .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> <span class="ident">info</span>.<span class="ident">profile</span>.<span class="ident">can_interact</span>(<span class="ident">profile</span>))
+                 .<span class="ident">filter</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> <span class="ident">info</span>.<span class="ident">pub_hitbox_at_time</span>(<span class="self">self</span>.<span class="ident">time</span>).<span class="ident">value</span>.<span class="ident">overlaps</span>(<span class="ident">shape</span>))
+                 .<span class="ident">map</span>(<span class="op">|</span><span class="ident">info</span><span class="op">|</span> <span class="ident">info</span>.<span class="ident">profile</span>)
+                 .<span class="ident">collect</span>()
+    }
+
+    <span class="kw">fn</span> <span class="ident">update_hitbox_tracking</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>, <span class="kw-2">mut</span> <span class="ident">info</span>: <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">old_hitbox</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">DurHitbox</span><span class="op">&gt;</span>,
+                              <span class="ident">new_hitbox</span>: <span class="ident">DurHitbox</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">group</span>) <span class="op">=</span> <span class="ident">info</span>.<span class="ident">profile</span>.<span class="ident">group</span>() {
+            <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">other_id</span> <span class="kw">in</span> <span class="ident">info</span>.<span class="ident">overlaps</span>.<span class="ident">clone</span>().<span class="ident">iter</span>() {
+                <span class="kw">let</span> <span class="ident">other_info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">other_id</span>).<span class="ident">unwrap</span>();
+                <span class="kw">let</span> <span class="ident">delay</span> <span class="op">=</span> <span class="ident">new_hitbox</span>.<span class="ident">separate_time</span>(<span class="kw-2">&amp;</span><span class="ident">other_info</span>.<span class="ident">hitbox_at_time</span>(<span class="self">self</span>.<span class="ident">time</span>), <span class="self">self</span>.<span class="ident">padding</span>);
+                <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">add_pair_event</span>(<span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">delay</span>, <span class="ident">InternalEvent</span>::<span class="ident">Separate</span>(<span class="ident">id</span>, <span class="ident">other_id</span>),
+                    <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>.<span class="ident">event_keys</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">other_info</span>.<span class="ident">event_keys</span>);
+            }
+            <span class="kw">let</span> <span class="ident">test_ids</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">grid</span>.<span class="ident">update_hitbox</span>(
+                <span class="ident">id</span>, <span class="ident">group</span>, <span class="ident">old_hitbox</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">new_hitbox</span>), <span class="ident">info</span>.<span class="ident">profile</span>.<span class="ident">interact_groups</span>()
+            ).<span class="ident">unwrap</span>();
+            <span class="kw">for</span> <span class="ident">other_id</span> <span class="kw">in</span> <span class="ident">test_ids</span> {
+                <span class="kw">if</span> <span class="ident">old_hitbox</span>.<span class="ident">is_none</span>() <span class="op">|</span><span class="op">|</span> <span class="op">!</span><span class="ident">info</span>.<span class="ident">overlaps</span>.<span class="ident">contains</span>(<span class="kw-2">&amp;</span><span class="ident">other_id</span>) {
+                    <span class="kw">let</span> <span class="ident">other_info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">other_id</span>).<span class="ident">unwrap</span>();
+                    <span class="kw">if</span> <span class="ident">info</span>.<span class="ident">profile</span>.<span class="ident">can_interact</span>(<span class="kw-2">&amp;</span><span class="ident">other_info</span>.<span class="ident">profile</span>) {
+                        <span class="kw">let</span> <span class="ident">delay</span> <span class="op">=</span> <span class="ident">new_hitbox</span>.<span class="ident">collide_time</span>(<span class="kw-2">&amp;</span><span class="ident">other_info</span>.<span class="ident">hitbox_at_time</span>(<span class="self">self</span>.<span class="ident">time</span>));
+                        <span class="kw">if</span> <span class="ident">old_hitbox</span>.<span class="ident">is_none</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">delay</span> <span class="op">=</span><span class="op">=</span> <span class="number">0.0</span> {
+                            <span class="ident">result</span>.<span class="ident">push</span>(<span class="ident">other_info</span>.<span class="ident">profile</span>);
+                            <span class="ident">Collider</span>::<span class="ident">process_collision</span>(<span class="ident">id</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>, <span class="ident">other_id</span>, <span class="ident">other_info</span>,
+                                                        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">events</span>, <span class="self">self</span>.<span class="ident">time</span>, <span class="self">self</span>.<span class="ident">padding</span>);
+                        } <span class="kw">else</span> {
+                            <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">add_pair_event</span>(<span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">delay</span>, <span class="ident">InternalEvent</span>::<span class="ident">Collide</span>(<span class="ident">id</span>, <span class="ident">other_id</span>),
+                                <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">info</span>.<span class="ident">event_keys</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">other_info</span>.<span class="ident">event_keys</span>);
+                        }
+                    }
+                }
+            }
+        }
+
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">insert</span>(<span class="ident">id</span>, <span class="ident">info</span>).<span class="ident">is_none</span>());
+        <span class="ident">result</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">clear_overlaps</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>, <span class="ident">hitbox_info</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="ident">hitbox_info</span>.<span class="ident">overlaps</span>.<span class="ident">drain</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">other_id</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">other_hitbox_info</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitboxes</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">other_id</span>).<span class="ident">unwrap</span>();
+            <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">other_hitbox_info</span>.<span class="ident">overlaps</span>.<span class="ident">remove</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>));
+            <span class="ident">other_hitbox_info</span>.<span class="ident">profile</span>
+        }).<span class="ident">collect</span>()
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">debug_assertions</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">solitaire_event_check</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>, <span class="ident">hitbox_info</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">has_group</span>: <span class="ident">bool</span>) {
+        <span class="ident">hitbox_info</span>.<span class="ident">pub_end_time</span> <span class="op">=</span> <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">grid</span>.<span class="ident">cell_period</span>(<span class="kw-2">&amp;</span><span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>, <span class="ident">has_group</span>), <span class="ident">InternalEvent</span>::<span class="ident">Reiterate</span>(<span class="ident">id</span>));
+        <span class="kw">let</span> <span class="ident">end_time</span> <span class="op">=</span> <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span>;
+        <span class="kw">if</span> <span class="ident">end_time</span> <span class="op">&lt;</span> <span class="ident">result</span>.<span class="number">0</span> { <span class="ident">result</span> <span class="op">=</span> (<span class="ident">end_time</span>, <span class="ident">InternalEvent</span>::<span class="ident">PanicDurationPassed</span>(<span class="ident">id</span>)); }
+        <span class="kw">let</span> <span class="ident">end_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">time_until_too_small</span>(<span class="self">self</span>.<span class="ident">padding</span>);
+        <span class="kw">if</span> <span class="ident">end_time</span> <span class="op">&lt;</span> <span class="ident">result</span>.<span class="number">0</span> { <span class="ident">result</span> <span class="op">=</span> (<span class="ident">end_time</span>, <span class="ident">InternalEvent</span>::<span class="ident">PanicSmallHitbox</span>(<span class="ident">id</span>)); }
+        <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span> <span class="op">=</span> <span class="ident">result</span>.<span class="number">0</span>;
+        <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">add_solitaire_event</span>(<span class="ident">result</span>.<span class="number">0</span>, <span class="ident">result</span>.<span class="number">1</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">hitbox_info</span>.<span class="ident">event_keys</span>);
+    }
+
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">debug_assertions</span>))]</span>
+    <span class="kw">fn</span> <span class="ident">solitaire_event_check</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>, <span class="ident">hitbox_info</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">has_group</span>: <span class="ident">bool</span>) {
+        <span class="ident">hitbox_info</span>.<span class="ident">pub_end_time</span> <span class="op">=</span> <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="self">self</span>.<span class="ident">grid</span>.<span class="ident">cell_period</span>(<span class="kw-2">&amp;</span><span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>, <span class="ident">has_group</span>), <span class="bool-val">true</span>);
+        <span class="kw">let</span> <span class="ident">end_time</span> <span class="op">=</span> <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span>;
+        <span class="kw">if</span> <span class="ident">end_time</span> <span class="op">&lt;</span> <span class="ident">result</span>.<span class="number">0</span> { <span class="ident">result</span> <span class="op">=</span> (<span class="ident">end_time</span>, <span class="bool-val">false</span>); }
+        <span class="kw">let</span> <span class="ident">end_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">time</span> <span class="op">+</span> <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">time_until_too_small</span>(<span class="self">self</span>.<span class="ident">padding</span>);
+        <span class="kw">if</span> <span class="ident">end_time</span> <span class="op">&lt;</span> <span class="ident">result</span>.<span class="number">0</span> { <span class="ident">result</span> <span class="op">=</span> (<span class="ident">end_time</span>, <span class="bool-val">false</span>); }
+        <span class="ident">hitbox_info</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span> <span class="op">=</span> <span class="ident">result</span>.<span class="number">0</span>;
+        <span class="kw">if</span> <span class="ident">result</span>.<span class="number">1</span> { <span class="self">self</span>.<span class="ident">events</span>.<span class="ident">add_solitaire_event</span>(<span class="ident">result</span>.<span class="number">0</span>, <span class="ident">InternalEvent</span>::<span class="ident">Reiterate</span>(<span class="ident">id</span>), <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">hitbox_info</span>.<span class="ident">event_keys</span>); }
+    }
+}
+
+
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">HbProfile</span><span class="op">&gt;</span> <span class="ident">EventKeysMap</span> <span class="kw">for</span> <span class="ident">FnvHashMap</span><span class="op">&lt;</span><span class="ident">HbId</span>, <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">event_keys_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">HbId</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TightSet</span><span class="op">&lt;</span><span class="ident">EventKey</span><span class="op">&gt;</span> {
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>).<span class="ident">unwrap</span>().<span class="ident">event_keys</span>
+    }
+}
+
+<span class="kw">struct</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">HbProfile</span><span class="op">&gt;</span> {
+    <span class="ident">profile</span>: <span class="ident">P</span>,
+    <span class="ident">hitbox</span>: <span class="ident">Hitbox</span>,
+    <span class="ident">start_time</span>: <span class="ident">f64</span>,
+    <span class="ident">pub_end_time</span>: <span class="ident">f64</span>,
+    <span class="ident">event_keys</span>: <span class="ident">TightSet</span><span class="op">&lt;</span><span class="ident">EventKey</span><span class="op">&gt;</span>,
+    <span class="ident">overlaps</span>: <span class="ident">TightSet</span><span class="op">&lt;</span><span class="ident">HbId</span><span class="op">&gt;</span>
+}
+
+<span class="kw">impl</span> <span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">HbProfile</span><span class="op">&gt;</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">hitbox</span>: <span class="ident">Hitbox</span>, <span class="ident">profile</span>: <span class="ident">P</span>, <span class="ident">start_time</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HitboxInfo</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span> {
+        <span class="ident">HitboxInfo</span> {
+            <span class="ident">profile</span>: <span class="ident">profile</span>,
+            <span class="ident">pub_end_time</span>: <span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span>,
+            <span class="ident">hitbox</span>: <span class="ident">hitbox</span>,
+            <span class="ident">start_time</span>: <span class="ident">start_time</span>,
+            <span class="ident">event_keys</span>: <span class="ident">TightSet</span>::<span class="ident">new</span>(),
+            <span class="ident">overlaps</span>: <span class="ident">TightSet</span>::<span class="ident">new</span>()
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">hitbox_at_time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">time</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DurHitbox</span> {
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">time</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">start_time</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">time</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">hitbox</span>.<span class="ident">vel</span>.<span class="ident">end_time</span>, <span class="string">&quot;invalid time&quot;</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitbox</span>.<span class="ident">clone</span>();
+        <span class="ident">result</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">advanced_shape</span>(<span class="ident">time</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">start_time</span>);
+        <span class="ident">result</span>.<span class="ident">to_dur_hitbox</span>(<span class="ident">time</span>)
+    }
+
+    <span class="kw">fn</span> <span class="ident">pub_hitbox_at_time</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">time</span>: <span class="ident">f64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Hitbox</span> {
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">time</span> <span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">start_time</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">time</span> <span class="op">&lt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">pub_end_time</span>, <span class="string">&quot;invalid time&quot;</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">hitbox</span>.<span class="ident">clone</span>();
+        <span class="ident">result</span>.<span class="ident">vel</span>.<span class="ident">end_time</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">pub_end_time</span>;
+        <span class="ident">result</span>.<span class="ident">value</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">advanced_shape</span>(<span class="ident">time</span> <span class="op">-</span> <span class="self">self</span>.<span class="ident">start_time</span>);
+        <span class="ident">result</span>
+    }
+}
+
+<span class="doccomment">/// A hitbox event type that may be returned from a `Collider` instance.</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Debug</span>, <span class="ident">Hash</span>)]</span>
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HbEvent</span> {
+    <span class="doccomment">/// Occurs when two hitboxes collide</span>
+    <span class="ident">Collide</span>,
+
+    <span class="doccomment">/// Occurs when two hitboxes separate.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// A second `Collide` betweent two hitboxes may not occur before a `Separate`.</span>
+    <span class="doccomment">/// A `Separate` event must come after a `Collide` event.</span>
+    <span class="ident">Separate</span>
+}
+
+<span class="kw">fn</span> <span class="ident">new_event</span>(<span class="ident">event</span>: <span class="ident">HbEvent</span>, <span class="kw-2">mut</span> <span class="ident">id_1</span>: <span class="ident">HbId</span>, <span class="kw-2">mut</span> <span class="ident">id_2</span>: <span class="ident">HbId</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">HbEvent</span>, <span class="ident">HbId</span>, <span class="ident">HbId</span>) {
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">id_1</span> <span class="op">!</span><span class="op">=</span> <span class="ident">id_2</span>, <span class="string">&quot;ids must be different: {} {}&quot;</span>, <span class="ident">id_1</span>, <span class="ident">id_2</span>);
+    <span class="kw">if</span> <span class="ident">id_1</span> <span class="op">&gt;</span> <span class="ident">id_2</span> { <span class="ident">mem</span>::<span class="ident">swap</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">id_1</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">id_2</span>); }
+    (<span class="ident">event</span>, <span class="ident">id_1</span>, <span class="ident">id_2</span>)
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "collider";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

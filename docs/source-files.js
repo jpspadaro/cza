@@ -1,0 +1,18 @@
+var N = null;var sourcesIndex = {};
+sourcesIndex["bitflags"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["byteorder"] = {"name":"","files":["io.rs","lib.rs"]};
+sourcesIndex["chirperjax"] = {"name":"","dirs":[{"name":"game","files":["background.rs","builder.rs","button.rs","cell.rs","effect.rs","mod.rs","piece_profile.rs","platform.rs","player.rs","player_enum.rs","star.rs","step_queue.rs","util.rs","warp.rs"]}],"files":["game_input.rs","level_loader.rs","main.rs"]};
+sourcesIndex["collider"] = {"name":"","dirs":[{"name":"core","dirs":[{"name":"dur_hitbox","files":["mod.rs","solvers.rs"]}],"files":["collider.rs","events.rs","grid.rs","mod.rs"]},{"name":"geom","dirs":[{"name":"shape","files":["mod.rs","normals.rs"]}],"files":["card.rs","mod.rs","vec.rs"]}],"files":["float.rs","index_rect.rs","lib.rs","util.rs"]};
+sourcesIndex["fnv"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["gate"] = {"name":"","dirs":[{"name":"core","dirs":[{"name":"sdl","files":["app_clock.rs","core_audio.rs","event_handler.rs","mod.rs"]}],"files":["mod.rs"]},{"name":"renderer","dirs":[{"name":"core_renderer","dirs":[{"name":"sdl","files":["mod.rs","shader_util.rs","sprite_program.rs"]}],"files":["mod.rs"]},{"name":"shaders","files":["mod.rs"]}],"files":["atlas.rs","geom.rs","macros.rs","mod.rs","render_buffer.rs","renderer.rs","vbo_packer.rs"]}],"files":["app_context.rs","app_info.rs","asset_id.rs","input.rs","lib.rs"]};
+sourcesIndex["gl"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["lazy_static"] = {"name":"","files":["lazy.rs","lib.rs"]};
+sourcesIndex["libc"] = {"name":"","dirs":[{"name":"unix","dirs":[{"name":"bsd","dirs":[{"name":"apple","dirs":[{"name":"b64","files":["align.rs","mod.rs"]}],"files":["mod.rs"]}],"files":["mod.rs"]}],"files":["align.rs","mod.rs"]}],"files":["fixed_width_ints.rs","lib.rs","macros.rs"]};
+sourcesIndex["num"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["num_integer"] = {"name":"","files":["lib.rs","roots.rs"]};
+sourcesIndex["num_iter"] = {"name":"","files":["lib.rs"]};
+sourcesIndex["num_traits"] = {"name":"","dirs":[{"name":"ops","files":["checked.rs","inv.rs","mod.rs","mul_add.rs","saturating.rs","wrapping.rs"]}],"files":["bounds.rs","cast.rs","float.rs","identities.rs","int.rs","lib.rs","macros.rs","pow.rs","real.rs","sign.rs"]};
+sourcesIndex["rand"] = {"name":"","dirs":[{"name":"distributions","files":["mod.rs"]}],"files":["lib.rs","rand_impls.rs"]};
+sourcesIndex["sdl2"] = {"name":"","dirs":[{"name":"image","files":["ffi.rs","mod.rs"]},{"name":"keyboard","files":["keycode.rs","mod.rs","scancode.rs"]},{"name":"mixer","files":["ffi.rs","mod.rs"]},{"name":"mouse","files":["mod.rs","relative.rs"]}],"files":["audio.rs","clipboard.rs","common.rs","controller.rs","cpuinfo.rs","event.rs","filesystem.rs","gesture.rs","haptic.rs","hint.rs","joystick.rs","lib.rs","macros.rs","messagebox.rs","pixels.rs","rect.rs","render.rs","rwops.rs","sdl.rs","surface.rs","timer.rs","touch.rs","version.rs","video.rs"]};
+sourcesIndex["sdl2_sys"] = {"name":"","files":["audio.rs","clipboard.rs","controller.rs","cpuinfo.rs","event.rs","filesystem.rs","gesture.rs","haptic.rs","hint.rs","joystick.rs","keyboard.rs","keycode.rs","lib.rs","messagebox.rs","mouse.rs","pixels.rs","rect.rs","render.rs","rwops.rs","scancode.rs","sdl.rs","surface.rs","timer.rs","touch.rs","version.rs","video.rs"]};
+createSourceSidebar();

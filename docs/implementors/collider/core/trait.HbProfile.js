@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["chirperjax"] = [{"text":"impl <a class=\"trait\" href=\"collider/core/trait.HbProfile.html\" title=\"trait collider::core::HbProfile\">HbProfile</a> for <a class=\"struct\" href=\"chirperjax/game/piece_profile/struct.PieceProfile.html\" title=\"struct chirperjax::game::piece_profile::PieceProfile\">PieceProfile</a>","synthetic":false,"types":["chirperjax::game::piece_profile::PieceProfile"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
