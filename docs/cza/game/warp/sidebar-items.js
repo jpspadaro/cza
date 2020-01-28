@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["LASOR_FIRE_OFFSET",""],["LASOR_FIRE_SPEED",""],["SPIN_VEL",""]],"enum":[["LasorKind",""],["WarpColor",""]],"fn":[["angle_to_vec",""],["shape",""]],"struct":[["Lasor",""]]});

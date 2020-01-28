@@ -44,15 +44,6 @@ version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "chirperjax"
-version = "0.1.0"
-dependencies = [
- "collider 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "gate 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
- "gate_build 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "collider"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -103,6 +94,15 @@ dependencies = [
  "autocfg 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "cza"
+version = "0.0.1"
+dependencies = [
+ "collider 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gate 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "gate_build 0.6.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

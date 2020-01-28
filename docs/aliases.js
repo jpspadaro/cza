@@ -3,6 +3,7 @@ ALIASES["bitflags"] = {};
 ALIASES["byteorder"] = {};
 ALIASES["chirperjax"] = {};
 ALIASES["collider"] = {};
+ALIASES["cza"] = {};
 ALIASES["fnv"] = {};
 ALIASES["gate"] = {};
 ALIASES["gl"] = {};
