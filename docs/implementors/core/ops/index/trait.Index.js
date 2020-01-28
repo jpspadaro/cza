@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["collider"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/index/trait.Index.html\" title=\"trait core::ops::index::Index\">Index</a>&lt;<a class=\"enum\" href=\"collider/geom/enum.Card.html\" title=\"enum collider::geom::Card\">Card</a>&gt; for <a class=\"struct\" href=\"collider/geom/struct.CardMask.html\" title=\"struct collider::geom::CardMask\">CardMask</a>","synthetic":false,"types":["collider::geom::card::CardMask"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

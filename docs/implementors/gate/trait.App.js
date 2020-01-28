@@ -1,3 +1,0 @@
-(function() {var implementors = {};
-implementors["chirperjax"] = [{"text":"impl <a class=\"trait\" href=\"gate/trait.App.html\" title=\"trait gate::App\">App</a>&lt;<a class=\"struct\" href=\"chirperjax/asset_id/struct.AssetId.html\" title=\"struct chirperjax::asset_id::AssetId\">AssetId</a>&gt; for <a class=\"struct\" href=\"chirperjax/struct.GameApp.html\" title=\"struct chirperjax::GameApp\">GameApp</a>","synthetic":false,"types":["chirperjax::GameApp"]}];
-if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
