@@ -16,8 +16,10 @@
 
 use crate::game::{GameBoard, LasorKind, PlatformKind, WarpColor, Idx2};
 
+/// Number of levels in game...loops once you reach this number. Used for array sizes.
 pub const LEVEL_COUNT: usize = 7;
 
+/// Level maps for display.
 const LEVELS: [&'static str; LEVEL_COUNT] = [
     include_str!("levels/level0.txt"),
     include_str!("levels/level1.txt"),
@@ -28,6 +30,7 @@ const LEVELS: [&'static str; LEVEL_COUNT] = [
     include_str!("levels/level6.txt"),
 ];
 
+/// Level maps for game logic.
 const LEVELS_INDEX: [&'static str; LEVEL_COUNT] = [
     include_str!("levels/level0_index.txt"),
     include_str!("levels/level1_index.txt"),
@@ -38,6 +41,7 @@ const LEVELS_INDEX: [&'static str; LEVEL_COUNT] = [
     include_str!("levels/level6_index.txt"),
 ];
 
+/// Loads level files into the game board.
 pub fn load(level_num: usize) -> GameBoard {
     let level = LevelFile::new(LEVELS[level_num]);
     let level_index = LevelFile::new(LEVELS_INDEX[level_num]);
@@ -75,7 +79,7 @@ pub fn load(level_num: usize) -> GameBoard {
 fn digit(c: char) -> Option<u32> {
     if c >= '0' && c <= '9' { Some(c as u32 - '0' as u32) } else { None }
 }
-
+/// Converts index file number to warp "color".
 fn index_to_color(index: u32) -> WarpColor {
     match index {
         0 => WarpColor::Green,
@@ -85,9 +89,11 @@ fn index_to_color(index: u32) -> WarpColor {
     }
 }
 
+/// File object for level files.
 struct LevelFile { dims: Idx2, grid: Vec<Vec<char>> }
 
 impl LevelFile {
+    /// Level file constructor.
     fn new(file_contents: &str) -> LevelFile {
         let grid: Vec<Vec<char>> = file_contents.lines().map(|s| s.chars().collect())
                                                         .filter(|s: &Vec<char>| !s.is_empty())
