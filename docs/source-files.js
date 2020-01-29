@@ -1,7 +1,6 @@
 var N = null;var sourcesIndex = {};
 sourcesIndex["bitflags"] = {"name":"","files":["lib.rs"]};
 sourcesIndex["byteorder"] = {"name":"","files":["io.rs","lib.rs"]};
-sourcesIndex["chirperjax"] = {"name":"","dirs":[{"name":"game","files":["background.rs","builder.rs","button.rs","cell.rs","effect.rs","mod.rs","piece_profile.rs","platform.rs","player.rs","player_enum.rs","star.rs","step_queue.rs","util.rs","warp.rs"]}],"files":["game_input.rs","level_loader.rs","main.rs"]};
 sourcesIndex["collider"] = {"name":"","dirs":[{"name":"core","dirs":[{"name":"dur_hitbox","files":["mod.rs","solvers.rs"]}],"files":["collider.rs","events.rs","grid.rs","mod.rs"]},{"name":"geom","dirs":[{"name":"shape","files":["mod.rs","normals.rs"]}],"files":["card.rs","mod.rs","vec.rs"]}],"files":["float.rs","index_rect.rs","lib.rs","util.rs"]};
 sourcesIndex["cza"] = {"name":"","dirs":[{"name":"game","files":["background.rs","builder.rs","button.rs","cell.rs","effect.rs","mod.rs","piece_profile.rs","platform.rs","player.rs","player_enum.rs","star.rs","step_queue.rs","util.rs","warp.rs"]}],"files":["game_input.rs","level_loader.rs","main.rs"]};
 sourcesIndex["fnv"] = {"name":"","files":["lib.rs"]};

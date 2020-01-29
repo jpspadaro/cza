@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["PieceKind",""]],"struct":[["PieceProfile",""]]});

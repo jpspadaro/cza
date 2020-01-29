@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["CELL_LEN",""],["SCREEN_PIXELS_HEIGHT",""]],"fn":[["wall_card_mask",""]],"mod":[["background",""],["builder",""],["button",""],["cell",""],["effect",""],["piece_profile",""],["platform",""],["player",""],["player_enum",""],["star",""],["step_queue",""],["util",""],["warp",""]],"struct":[["GameBoard",""]],"type":[["Idx2",""]]});

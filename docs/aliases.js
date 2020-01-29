@@ -1,7 +1,6 @@
 var ALIASES = {};
 ALIASES["bitflags"] = {};
 ALIASES["byteorder"] = {};
-ALIASES["chirperjax"] = {};
 ALIASES["collider"] = {};
 ALIASES["cza"] = {};
 ALIASES["fnv"] = {};

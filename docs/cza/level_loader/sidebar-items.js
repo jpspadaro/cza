@@ -1,1 +1,1 @@
-initSidebarItems({"constant":[["LEVELS",""],["LEVELS_INDEX",""],["LEVEL_COUNT",""]],"fn":[["digit",""],["index_to_color",""],["load",""]],"struct":[["LevelFile",""]]});
+initSidebarItems({"constant":[["LEVELS","Level maps for display."],["LEVELS_INDEX","Level maps for game logic."],["LEVEL_COUNT","Number of levels in game...loops once you reach this number. Used for array sizes."]],"fn":[["digit",""],["index_to_color","Converts index file number to warp \"color\"."],["load","Loads level files into the game board."]],"struct":[["LevelFile","File object for level files."]]});

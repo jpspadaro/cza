@@ -1,1 +1,1 @@
-initSidebarItems({"fn":[["main",""]],"mod":[["asset_id",""],["game",""],["game_input",""],["level_loader",""]],"struct":[["GameApp",""]]});
+initSidebarItems({"fn":[["main","Kicks off GameApp with appropriate window info."]],"mod":[["asset_id",""],["game",""],["game_input",""],["level_loader",""]],"struct":[["GameApp","Primary struct for game logic."]]});

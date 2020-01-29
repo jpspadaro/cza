@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["main",""]],"mod":[["asset_id",""],["game",""],["game_input",""],["level_loader",""]],"struct":[["GameApp",""]]});

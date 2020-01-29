@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["PendingCell",""]],"struct":[["GameBoardBuilder",""]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["START_DELAY",""],["START_FADE_VEL",""],["WARP_SPEED",""]],"enum":[["PlayerEnum",""]],"struct":[["PlayerComplete",""],["PlayerWarping",""]]});

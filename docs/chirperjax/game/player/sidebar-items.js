@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["FALL_ACCEL",""],["GRAPHIC_CHIRP_DELAY",""],["GRAPHIC_CHIRP_DURATION",""],["GRAPHIC_STEP_DURATION",""],["JUMP_SPEED",""],["MAX_FALL_SPEED",""],["MAX_MOVE_SPEED",""],["MOVE_ACCEL",""],["STEP_PERIOD",""],["STOP_ACCEL",""]],"fn":[["jump_duration",""]],"struct":[["Player",""]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["OBTAIN_FADE_VEL",""],["OBTAIN_VANISH_DELAY",""]],"struct":[["Star",""]]});

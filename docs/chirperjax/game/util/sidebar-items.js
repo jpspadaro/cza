@@ -1,1 +1,0 @@
-initSidebarItems({"fn":[["card_offset",""],["idx_to_vec",""],["nearest_card",""],["vec_to_affine",""]],"struct":[["IdGen",""]]});

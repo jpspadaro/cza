@@ -1,1 +1,0 @@
-initSidebarItems({"constant":[["COLOR",""],["PERIOD",""],["SEPARATION",""]],"fn":[["draw",""],["draw_bg_piece_grid",""]]});

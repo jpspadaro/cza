@@ -71,6 +71,10 @@
 <span id="71">71</span>
 <span id="72">72</span>
 <span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// chirperjax, a demo game built using the &quot;gate&quot; game library.</span>
 <span class="comment">// Copyright (C) 2017-2019  Matthew D. Michelotti</span>
@@ -90,17 +94,19 @@
 
 <span class="kw">use</span> <span class="ident">gate</span>::<span class="ident">KeyCode</span>;
 
+<span class="doccomment">/// Enum for x axis movement.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Eq</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Hash</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">HorizDir</span> { <span class="ident">Left</span>, <span class="ident">Right</span> }
 
 <span class="kw">impl</span> <span class="ident">HorizDir</span> {
+    <span class="doccomment">/// Returns a +1 or -1 as a float based on direction.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">signum</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
         <span class="kw">match</span> <span class="self">self</span> {
             <span class="ident">HorizDir</span>::<span class="ident">Left</span> <span class="op">=</span><span class="op">&gt;</span> <span class="op">-</span><span class="number">1.</span>,
             <span class="ident">HorizDir</span>::<span class="ident">Right</span> <span class="op">=</span><span class="op">&gt;</span> <span class="number">1.</span>,
         }
     }
-
+    <span class="doccomment">/// Returns a left or right based on keycode</span>
     <span class="kw">fn</span> <span class="ident">from_key</span>(<span class="ident">key</span>: <span class="ident">KeyCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HorizDir</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="ident">key</span> {
             <span class="ident">KeyCode</span>::<span class="ident">Left</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">HorizDir</span>::<span class="ident">Left</span>),
@@ -109,7 +115,7 @@
         }
     }
 }
-
+<span class="doccomment">/// Enum of possible input events</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">InputEvent</span> {
     <span class="ident">UpdateMovement</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HorizDir</span><span class="op">&gt;</span>),
     <span class="ident">PressJump</span>,
@@ -119,8 +125,10 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GameInput</span> { <span class="ident">held_dirs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">HorizDir</span><span class="op">&gt;</span> }
 
 <span class="kw">impl</span> <span class="ident">GameInput</span> {
+    <span class="doccomment">/// GameInput Constructor</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GameInput</span> { <span class="ident">GameInput</span> { <span class="ident">held_dirs</span>: <span class="ident">Vec</span>::<span class="ident">new</span>() } }
 
+    <span class="doccomment">/// Handles keydown input </span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">key_down</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">KeyCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InputEvent</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">dir</span>) <span class="op">=</span> <span class="ident">HorizDir</span>::<span class="ident">from_key</span>(<span class="ident">key</span>) {
             <span class="self">self</span>.<span class="ident">held_dirs</span>.<span class="ident">push</span>(<span class="ident">dir</span>);
@@ -131,7 +139,7 @@
             <span class="prelude-val">None</span>
         }
     }
-
+    <span class="doccomment">/// Handles key up input</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">key_up</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">KeyCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">InputEvent</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">dir</span>) <span class="op">=</span> <span class="ident">HorizDir</span>::<span class="ident">from_key</span>(<span class="ident">key</span>) {
             <span class="self">self</span>.<span class="ident">held_dirs</span>.<span class="ident">retain</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span> <span class="op">!</span><span class="op">=</span> <span class="ident">dir</span>);
@@ -142,7 +150,7 @@
             <span class="prelude-val">None</span>
         }
     }
-
+    <span class="doccomment">/// Returns direction last used stored in GameInput</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">held_dir</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HorizDir</span><span class="op">&gt;</span> { <span class="self">self</span>.<span class="ident">held_dirs</span>.<span class="ident">last</span>().<span class="ident">cloned</span>() }
 }
 </pre></div>
