@@ -16,17 +16,19 @@
 
 use gate::KeyCode;
 
+/// Enum for x axis movement.
 #[derive(PartialEq, Eq, Copy, Clone, Hash)]
 pub enum HorizDir { Left, Right }
 
 impl HorizDir {
+    /// Returns a +1 or -1 as a float based on direction.
     pub fn signum(self) -> f64 {
         match self {
             HorizDir::Left => -1.,
             HorizDir::Right => 1.,
         }
     }
-
+    /// Returns a left or right based on keycode
     fn from_key(key: KeyCode) -> Option<HorizDir> {
         match key {
             KeyCode::Left => Some(HorizDir::Left),
@@ -35,7 +37,7 @@ impl HorizDir {
         }
     }
 }
-
+/// Enum of possible input events
 pub enum InputEvent {
     UpdateMovement(Option<HorizDir>),
     PressJump,
@@ -45,8 +47,10 @@ pub enum InputEvent {
 pub struct GameInput { held_dirs: Vec<HorizDir> }
 
 impl GameInput {
+    /// GameInput Constructor
     pub fn new() -> GameInput { GameInput { held_dirs: Vec::new() } }
 
+    /// Handles keydown input 
     pub fn key_down(&mut self, key: KeyCode) -> Option<InputEvent> {
         if let Some(dir) = HorizDir::from_key(key) {
             self.held_dirs.push(dir);
@@ -57,7 +61,7 @@ impl GameInput {
             None
         }
     }
-
+    /// Handles key up input
     pub fn key_up(&mut self, key: KeyCode) -> Option<InputEvent> {
         if let Some(dir) = HorizDir::from_key(key) {
             self.held_dirs.retain(|&d| d != dir);
@@ -68,6 +72,6 @@ impl GameInput {
             None
         }
     }
-
+    /// Returns direction last used stored in GameInput
     pub fn held_dir(&self) -> Option<HorizDir> { self.held_dirs.last().cloned() }
 }
