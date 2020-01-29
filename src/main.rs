@@ -33,6 +33,7 @@ use crate::game::GameBoard;
 use crate::asset_id::{AssetId, MusicId, SpriteId};
 use crate::level_loader::LEVEL_COUNT;
 
+/// Kicks off GameApp with appropriate window info.
 fn main() {
     // TODO allow some flexibility in the app height
     let info = AppInfo::with_max_dims(game::SCREEN_PIXELS_HEIGHT * 16. / 9., game::SCREEN_PIXELS_HEIGHT)
@@ -44,13 +45,15 @@ fn main() {
     gate::run(info, GameApp::new());
 }
 
+/// Primary struct for game logic.
 struct GameApp { input: GameInput, level: usize, board: GameBoard }
 
 impl GameApp {
+    /// GameApp constructor. Takes in GameInput, the starting level, and loads the game board.
     pub fn new() -> GameApp {
         GameApp { input: GameInput::new(), level: 0, board: level_loader::load(0) }
     }
-
+    /// Advances the level and then calls level_loader::load to put it in the board.
     fn load_next_level(&mut self) {
         self.level = (self.level + 1) % LEVEL_COUNT;
         self.board = level_loader::load(self.level);
@@ -61,8 +64,9 @@ impl GameApp {
 }
 
 impl App<AssetId> for GameApp {
+    /// Used when the game starts. Just loads music for now.
     fn start(&mut self, ctx: &mut AppContext<AssetId>) { ctx.audio.loop_music(MusicId::BgMusic); }
-
+    /// Renders the gameboard to the window. Also includes the logic for additional graphics overlays on a per-level basis.
     fn render(&mut self, renderer: &mut Renderer<AssetId>, ctx: &AppContext<AssetId>) {
         self.board.draw(renderer, ctx);
         if self.level == 0 {
@@ -70,20 +74,20 @@ impl App<AssetId> for GameApp {
             renderer.sprite_mode().draw(affine, SpriteId::Instructions);
         }
     }
-
+    /// Advances board and checks if the level is done.
     fn advance(&mut self, seconds: f64, ctx: &mut AppContext<AssetId>) {
         self.board.advance(seconds, &mut ctx.audio);
         if self.board.is_done() {
             self.load_next_level();
         }
     }
-
+    /// Checks for key down events.
     fn key_down(&mut self, key: KeyCode, _: &mut AppContext<AssetId>) {
         if let Some(event) = self.input.key_down(key) {
             self.board.input(event);
         }
     }
-
+    /// Checks for key up events.
     fn key_up(&mut self, key: KeyCode, _: &mut AppContext<AssetId>) {
         if let Some(event) = self.input.key_up(key) {
             self.board.input(event);
