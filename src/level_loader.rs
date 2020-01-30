@@ -17,7 +17,7 @@
 use crate::game::{GameBoard, LasorKind, PlatformKind, WarpColor, Idx2};
 
 /// Number of levels in game...loops once you reach this number. Used for array sizes.
-pub const LEVEL_COUNT: usize = 7;
+pub const LEVEL_COUNT: usize = 8;
 
 /// Level maps for display.
 const LEVELS: [&'static str; LEVEL_COUNT] = [
@@ -28,6 +28,7 @@ const LEVELS: [&'static str; LEVEL_COUNT] = [
     include_str!("levels/level4.txt"),
     include_str!("levels/level5.txt"),
     include_str!("levels/level6.txt"),
+    include_str!("levels/level7.txt"),
 ];
 
 /// Level maps for game logic.
@@ -39,6 +40,7 @@ const LEVELS_INDEX: [&'static str; LEVEL_COUNT] = [
     include_str!("levels/level4_index.txt"),
     include_str!("levels/level5_index.txt"),
     include_str!("levels/level6_index.txt"),
+    include_str!("levels/level7_index.txt"),
 ];
 
 /// Loads level files into the game board.

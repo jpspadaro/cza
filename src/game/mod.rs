@@ -46,6 +46,7 @@ use self::step_queue::{StepQueue, Step};
 use self::cell::{Cell, CellKind};
 use self::effect::Effect;
 use self::star::Star;
+
 use self::platform::Platform;
 use self::button::ButtonAction;
 use self::util::{IdGen, idx_to_vec, vec_to_affine, card_offset};
@@ -60,6 +61,7 @@ pub type Idx2 = (i32, i32);
 const CELL_LEN: i32 = 8;
 pub const SCREEN_PIXELS_HEIGHT: f64 = CELL_LEN as f64 * 24.;
 
+/// Stores GameBoard values and includes a LOT of high level game logic as methods.
 pub struct GameBoard {
     id_gen: IdGen,
     collider: Collider<PieceProfile>,
@@ -85,6 +87,7 @@ impl GameBoard {
     fn player_pos(&self) -> Vec2 { self.player.pos(&self.collider) }
     fn time(&self) -> f64 { self.collider.time() }
 
+	/// Gameboard level input handling...
     pub fn input(&mut self, event: InputEvent) {
         match event {
             InputEvent::UpdateMovement(dir) => self.move_dir = dir,
@@ -98,7 +101,8 @@ impl GameBoard {
             }
         }
     }
-
+	
+	/// Gameboard-level time advance logic.
     pub fn advance(&mut self, elapsed: f64, audio: &mut Audio<AssetId>) {
         let end_time = self.time() + elapsed;
         if self.time() == 0.0 && end_time > 0.0 { audio.play_sound(SoundId::Clear); }

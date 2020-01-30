@@ -105,6 +105,8 @@
 <span id="105">105</span>
 <span id="106">106</span>
 <span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// chirperjax, a demo game built using the &quot;gate&quot; game library.</span>
 <span class="comment">// Copyright (C) 2017-2019  Matthew D. Michelotti</span>
@@ -125,7 +127,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">game</span>::{<span class="ident">GameBoard</span>, <span class="ident">LasorKind</span>, <span class="ident">PlatformKind</span>, <span class="ident">WarpColor</span>, <span class="ident">Idx2</span>};
 
 <span class="doccomment">/// Number of levels in game...loops once you reach this number. Used for array sizes.</span>
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">LEVEL_COUNT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">7</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">LEVEL_COUNT</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">8</span>;
 
 <span class="doccomment">/// Level maps for display.</span>
 <span class="kw">const</span> <span class="ident">LEVELS</span>: [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>; <span class="ident">LEVEL_COUNT</span>] <span class="op">=</span> [
@@ -136,6 +138,7 @@
     <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level4.txt&quot;</span>),
     <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level5.txt&quot;</span>),
     <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level6.txt&quot;</span>),
+    <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level7.txt&quot;</span>),
 ];
 
 <span class="doccomment">/// Level maps for game logic.</span>
@@ -147,6 +150,7 @@
     <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level4_index.txt&quot;</span>),
     <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level5_index.txt&quot;</span>),
     <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level6_index.txt&quot;</span>),
+    <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;levels/level7_index.txt&quot;</span>),
 ];
 
 <span class="doccomment">/// Loads level files into the game board.</span>

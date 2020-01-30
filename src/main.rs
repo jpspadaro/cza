@@ -73,6 +73,10 @@ impl App<AssetId> for GameApp {
             let affine = &Affine::translate(0.5 * ctx.dims().0, 0.5 * ctx.dims().1).pre_scale(2.);
             renderer.sprite_mode().draw(affine, SpriteId::Instructions);
         }
+		if self.level == 1 {
+			let affine = &Affine::translate(0.5 * ctx.dims().0, 0.5 * ctx.dims().1).pre_scale(2.);
+            renderer.sprite_mode().draw(affine, SpriteId::Level1Splash);
+		}
     }
     /// Advances board and checks if the level is done.
     fn advance(&mut self, seconds: f64, ctx: &mut AppContext<AssetId>) {
