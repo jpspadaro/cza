@@ -69,7 +69,9 @@ impl App<AssetId> for GameApp {
     /// Renders the gameboard to the window. Also includes the logic for additional graphics overlays on a per-level basis.
     fn render(&mut self, renderer: &mut Renderer<AssetId>, ctx: &AppContext<AssetId>) {
         self.board.draw(renderer, ctx);
-        if self.level == 0 {
+        
+		// INSERT NEW LEVEL SPLASHES HERE
+		if self.level == 0 {
             let affine = &Affine::translate(0.5 * ctx.dims().0, 0.5 * ctx.dims().1).pre_scale(2.);
             renderer.sprite_mode().draw(affine, SpriteId::Instructions);
         }
