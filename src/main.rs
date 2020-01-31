@@ -88,7 +88,7 @@ impl App<AssetId> for GameApp {
             renderer.sprite_mode().draw(affine, SpriteId::Level3Splash);
 		}
 		if self.level == 4 {
-			let affine = &Affine::translate(0.5 * ctx.dims().0, 0.5 * ctx.dims().1).pre_scale(2.);
+            let affine = &Affine::translate(0.5 * ctx.dims().0, 0.5 * ctx.dims().1).pre_scale(2.);
             renderer.sprite_mode().draw(affine, SpriteId::Level4Splash);
 		}
     }
@@ -97,6 +97,11 @@ impl App<AssetId> for GameApp {
         self.board.advance(seconds, &mut ctx.audio);
         if self.board.is_done() {
             self.load_next_level();
+
+            /// Insert background music changes here
+            if self.level == 4 {
+                ctx.audio.loop_music(MusicId::AQuietMomentToMyself);
+            }
         }
     }
     /// Checks for key down events.
