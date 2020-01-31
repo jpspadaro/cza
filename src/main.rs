@@ -91,6 +91,10 @@ impl App<AssetId> for GameApp {
             let affine = &Affine::translate(0.5 * ctx.dims().0, 0.5 * ctx.dims().1).pre_scale(2.);
             renderer.sprite_mode().draw(affine, SpriteId::Level4Splash);
 		}
+		if self.level == 5 {
+            let affine = &Affine::translate(0.5 * ctx.dims().0, 0.5 * ctx.dims().1).pre_scale(2.);
+            renderer.sprite_mode().draw(affine, SpriteId::Level5Splash);
+		}
     }
     /// Advances board and checks if the level is done.
     fn advance(&mut self, seconds: f64, ctx: &mut AppContext<AssetId>) {
@@ -98,7 +102,7 @@ impl App<AssetId> for GameApp {
         if self.board.is_done() {
             self.load_next_level();
 
-            /// Insert background music changes here
+            // Insert background music changes here
             if self.level == 4 {
                 ctx.audio.loop_music(MusicId::AQuietMomentToMyself);
             }
